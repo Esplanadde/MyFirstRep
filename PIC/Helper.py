@@ -9,4 +9,18 @@ def calculate_number_timesteps(T, dt):
     return int(T / dt) + 1
 
 
+q = 4.8 * 10 ** (-10)
+m = 1.67 * 10 ** (-27)
+qm = q / m
+cs = 3 * 10 ** 10
+n = 1.0
+T = 10.0**5
+kb = 1.38 * 10 **(-16)
+ld = np.sqrt((4 * np.pi * n * q**2) / (kb * T))
+B0 = 10 ** (-4)
+E0 = 0.0
+v0 = 3 * 10 ** 8
+dt = 0.001
+
+
 
