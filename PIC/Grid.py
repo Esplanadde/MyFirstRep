@@ -1,45 +1,56 @@
 import numpy as np
-import BoundaryCondition
-import scipy.fftpack
-import Helper
-import field_interpolation
+import Helper as h
+import random
 
 
-class Grid:
-
-    def __init__(self, T: float, L: float, NG: int, c: float = 1, bc=BoundaryCondition.BC()):
-
-        self.c = c
-        self.x, self.dx = np.linspace(0, L, NG, retstep=True, endpoint=False, dtype=np.float64)
-        self.x_interpolation = np.arange(NG+2)*self.dx - self.dx
-
-        self.dt = self.dx / c
-        self.T = T
-        self.NT = Helper.calculate_number_timesteps(T, self.dt)
-
-        self.charge_density = np.zeros(NG + 1, dtype=np.float64)
-        self.current_density_x = np.zeros((NG + 3), dtype=np.float64)
-        self.current_density_yz = np.zeros((NG + 4, 2), dtype=np.float64)
-        self.electric_field = np.zeros((NG + 2, 3), dtype=np.float64)
-        self.magnetic_field = np.zeros((NG + 2, 3), dtype=np.float64)
-
-        self.L = L
-        self.NG = NG
-
-        self.bc = bc
-        self.k = 2 * np.pi * scipy.fftpack.fftfreq(self.NG, self.dx)
-        self.k[0] = 0.0001
-
-        self.list_species = []
-        self.postprocessed = False
-        self.postprocessed_fourier = False
-        self.periodic = None
+class Particle:
+    def __init__(self):
+        self.r = np.zeros(3)
+        self.v = np.zeros(3)
+        self.a = np.zeros(3)
+        self.m_p = 1
 
 
-class PeriodicGrid(Grid):
+class Cell():
+    def __init__(self):
+        self.N = 0
+        self.particles = []
+        self.X_c = 0
+        self.size = 1
+        self.weight = 0
+        self.E = np.zeros(3)
+        self.B = np.zeros(3)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.interpolator = field_interpolation.PeriodicInterpolateField
-        self.periodic = True
+    def add_particle(self, particle=Particle()):
+        self.particles.append(particle)
+        self.weight += self.particles[self.N].m_p
+        self.N += 1
 
+
+def get_cell_number(x, cells):
+    for i in range(0, len(cells)):
+        if (x >= cells[i].X_c - cells[i].size / 2) and (x < cells[i].X_c + cells[i].size / 2):
+            return i
+
+
+# create grid center coordinates array
+def grid(N_c, x_min, x_max, cells=[]):
+    size = x_max - x_min
+    dx = (size / N_c)
+    for i in range(0, N_c):
+        cells.append(Cell())
+        cells[i].X_c = x_min + (dx * i) + (dx / 2)
+        cells[i].size = dx
+    return cells
+
+
+N_c = 10
+N_p = 10
+
+cells = grid(N_c, 0.0, h.ld * N_c)
+for i in range(0, N_p):
+    x = random.uniform(0.0, h.ld * N_c)
+    Part = Particle()
+    Part.r[0] = x
+    cell_number = get_cell_number(x, cells)
+    cells[cell_number].add_particle(Part)
