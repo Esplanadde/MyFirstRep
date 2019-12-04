@@ -26,8 +26,8 @@ class Cell():
         self.weight += self.particles[self.N].m_p
         self.N += 1
 
-    def delete(self, delete_number):
-        self.particles.pop(delete_number)
+    def delete(self, delete_numbe):
+        self.particles.pop(delete_numbe)
         self.weight -= self.particles[self.N].m_p
         self.N -= 1
 
