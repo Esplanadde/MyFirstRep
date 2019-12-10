@@ -2,6 +2,23 @@ import numpy as np
 import Helper as h
 import random
 import scipy.stats as st
+import matplotlib.pyplot as plt
+
+
+def Maxwell(v, T):
+    return np.sqrt(h.m/(2*np.pi*h.kb*T))*np.exp(-(h.m*v*v)/(2*h.kb*T))
+
+
+def invert_Maxwell(F, T):
+    speed = (1/(-h.m))*2*h.kb*T*np.log(F/np.sqrt(h.m/(2*np.pi*h.kb*T)))
+    return speed
+
+
+def get_rand_maxwell(T):
+    F = random.uniform(0.0, 1.0)
+    v = invert_Maxwell(F, T)
+    return v
+
 
 
 class Particle:
@@ -31,6 +48,7 @@ class Cell():
         self.particles.pop(delete_number)
         self.weight -= self.particles[self.N].m_p
         self.N -= 1
+
 
 
 def get_cell_number(x, cells):
@@ -64,10 +82,9 @@ for i in range(0, N_p):
     cell_number = get_cell_number(x, CELLS)
     CELLS[cell_number].add_particle(Part)
 
+speeds = np.zeros(100)
+for i in range(0,100):
+    speeds[i] = get_rand_maxwell(h.T)
 
-def Maxwell():
-    maxwell = st.maxwell
-    data = maxwell.rvs(scale=1, size=self.N)
-    params = maxwell.fit(data, floc=0)
-    datanew = maxwell.rvs(*params, size=1)
-    return datanew
+
+print(speeds)
