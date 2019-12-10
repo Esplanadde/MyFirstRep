@@ -1,6 +1,7 @@
 import numpy as np
 import Helper as h
 import random
+import scipy.stats as st
 
 
 class Particle:
@@ -26,8 +27,8 @@ class Cell():
         self.weight += self.particles[self.N].m_p
         self.N += 1
 
-    def delete(self, delete_numbe):
-        self.particles.pop(delete_numbe)
+    def delete(self, delete_number):
+        self.particles.pop(delete_number)
         self.weight -= self.particles[self.N].m_p
         self.N -= 1
 
@@ -39,7 +40,9 @@ def get_cell_number(x, cells):
 
 
 # create grid center coordinates array
-def grid(N_c, x_min, x_max, cells=[]):
+def grid(N_c, x_min, x_max, cells=None):
+    if cells is None:
+        cells = []
     size = x_max - x_min
     dx = (size / N_c)
     for i in range(0, N_c):
@@ -52,10 +55,19 @@ def grid(N_c, x_min, x_max, cells=[]):
 N_c = 10
 N_p = 10
 
-cells = grid(N_c, 0.0, h.ld * N_c)
+CELLS = grid(N_c, 0.0, h.ld * N_c)
+
 for i in range(0, N_p):
     x = random.uniform(0.0, h.ld * N_c)
     Part = Particle()
     Part.r[0] = x
-    cell_number = get_cell_number(x, cells)
-    cells[cell_number].add_particle(Part)
+    cell_number = get_cell_number(x, CELLS)
+    CELLS[cell_number].add_particle(Part)
+
+
+def Maxwell():
+    maxwell = st.maxwell
+    data = maxwell.rvs(scale=1, size=self.N)
+    params = maxwell.fit(data, floc=0)
+    datanew = maxwell.rvs(*params, size=1)
+    return datanew
