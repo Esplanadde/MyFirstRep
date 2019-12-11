@@ -4,22 +4,8 @@ import random
 import scipy.stats as st
 import matplotlib.pyplot as plt
 
-
-def Maxwell(v, T):
-    return np.sqrt(h.m/(2*np.pi*h.kb*T))*np.exp(-(h.m*v*v)/(2*h.kb*T))
-
-
-def invert_Maxwell(F, T):
-    speed = (1/(-h.m))*2*h.kb*T*np.log(F/np.sqrt(h.m/(2*np.pi*h.kb*T)))
-    return speed
-
-
-def get_rand_maxwell(T):
-    F = random.uniform(0.0, 1.0)
-    v = invert_Maxwell(F, T)
-    return v
-
-
+N_c = 10
+N_p = 10
 
 class Particle:
     def __init__(self):
@@ -49,6 +35,12 @@ class Cell():
         self.weight -= self.particles[self.N].m_p
         self.N -= 1
 
+    def Maxwell(self):
+        maxwell = st.maxwell
+        data = maxwell.rvs(scale=1, size=N_p)
+        params = maxwell.fit(data, floc=0)
+        datanew = maxwell.rvs(*params, size=1)
+        return datanew
 
 
 def get_cell_number(x, cells):
@@ -70,9 +62,6 @@ def grid(N_c, x_min, x_max, cells=None):
     return cells
 
 
-N_c = 10
-N_p = 10
-
 CELLS = grid(N_c, 0.0, h.ld * N_c)
 
 for i in range(0, N_p):
@@ -82,9 +71,8 @@ for i in range(0, N_p):
     cell_number = get_cell_number(x, CELLS)
     CELLS[cell_number].add_particle(Part)
 
-speeds = np.zeros(100)
-for i in range(0,100):
-    speeds[i] = get_rand_maxwell(h.T)
 
-
-print(speeds)
+# Maxwell-velocity distributed
+maxwell = np.zeros(N_p)
+for j in range(0, N_p):
+    maxwell[j] += CELLS[j].Maxwell()

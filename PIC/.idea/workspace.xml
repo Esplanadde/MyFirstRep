@@ -174,7 +174,14 @@
       <option name="project" value="LOCAL" />
       <updated>1575978371266</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Changed Maxwell-Distribution">
+      <created>1575981202953</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1575981202953</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -198,6 +205,7 @@
     <MESSAGE value="Added delete method for Cell" />
     <MESSAGE value="Added delete method for Cell (chngd)" />
     <MESSAGE value="Added test-Maxwell distribution" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added test-Maxwell distribution" />
+    <MESSAGE value="Changed Maxwell-Distribution" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed Maxwell-Distribution" />
   </component>
 </project>
